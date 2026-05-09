@@ -8,7 +8,6 @@ import java.net.Socket;
 
 public class GameClient {
   public static void main(String[] args) {
-    String input;
 
     try (var socket = new Socket("lunix", 4224)) {
       var inFromUser = new BufferedReader(new InputStreamReader(System.in));
@@ -20,15 +19,17 @@ public class GameClient {
         try {
           String reverb;
           while ((reverb = inFromServer.readLine()) != null) {
-            System.out.println("S> " + reverb);
+            System.out.println("S: " + reverb);
           }
+          System.exit(0);
         } catch (Exception e) {
           System.out.println("Connection closed");
         }
       }).start();
 
-      while ((input = inFromUser.readLine()) != null) {
-        outToServer.writeBytes(input + "\n");
+      String scream;
+      while ((scream = inFromUser.readLine()) != null) {
+        outToServer.writeBytes(scream + "\n");
         // sentence = inFromServer.readLine();
         // System.out.println("S: " + sentence);
 

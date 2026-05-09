@@ -53,13 +53,15 @@ public class GameServer {
 
         // envia a música
         if (Objects.equals(reverb.statusCode(), GMSStatusCode.INTRO_SUCCESS)
-            || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_SUCCESS)) {
+            || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_SUCCESS)
+            || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_ERROR)) {
           outToClient.writeBytes(session.getNextLine() + "\n");
         }
         // anuncia final do jogo
         else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER) ||
             Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_WIN)) {
-          break;
+          socket.close();
+          return;
         }
       }
     }
