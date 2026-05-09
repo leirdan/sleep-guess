@@ -1,11 +1,11 @@
-package br.com.ufrn.GMS;
+package br.com.ufrn.GMS.Parser;
 
 import org.javatuples.Pair;
 
-import br.com.ufrn.GMS.Screams.BreakdownScream;
+import br.com.ufrn.GMS.Screams.BreakScream;
+import br.com.ufrn.GMS.Screams.GuessScream;
 import br.com.ufrn.GMS.Screams.IScream;
 import br.com.ufrn.GMS.Screams.IntroScream;
-import br.com.ufrn.GMS.Screams.OutroScream;
 
 public class GMSParser {
   public Pair<IScream, String> parse(String line) {
@@ -26,13 +26,13 @@ public class GMSParser {
         if (parts.length != 2)
           return Pair.with(null, "GUESS scream requires 1 argument.");
 
-        return Pair.with(new BreakdownScream(parts[1]), null);
+        return Pair.with(new GuessScream(parts[1]), null);
       }
       case "BREAK" -> {
         if (parts.length != 1)
           return Pair.with(null, "BREAK scream does not require parameters.");
 
-        return Pair.with(new OutroScream(), null);
+        return Pair.with(new BreakScream(), null);
       }
       default -> {
         return Pair.with(null, "Unknown scream '" + parts[0] + "'");

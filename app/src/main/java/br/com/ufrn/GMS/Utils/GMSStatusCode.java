@@ -1,10 +1,11 @@
-package br.com.ufrn.GMS;
+package br.com.ufrn.GMS.Utils;
 
 public class GMSStatusCode {
   // Success codes
   public static Integer INTRO_SUCCESS = 20;
   public static Integer BREAKDOWN_GUESS_SUCCESS = 21;
   public static Integer OUTRO_SUCCESS = 22;
+  public static Integer BREAKDOWN_GAME_WIN = 24;
 
   // Error codes
   public static Integer INTRO_ERROR = 40;

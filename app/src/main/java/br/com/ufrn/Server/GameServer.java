@@ -10,16 +10,16 @@ import java.util.Objects;
 
 import org.javatuples.Pair;
 
-import br.com.ufrn.GMS.GMSParser;
-import br.com.ufrn.GMS.GMSSession;
-import br.com.ufrn.GMS.GMSStatusCode;
+import br.com.ufrn.GMS.Parser.GMSParser;
 import br.com.ufrn.GMS.Reverbs.GMSReverb;
 import br.com.ufrn.GMS.Screams.IScream;
+import br.com.ufrn.GMS.Session.GMSSession;
+import br.com.ufrn.GMS.Utils.GMSStatusCode;
 
 public class GameServer {
   public static void main(String[] args) {
 
-    try (ServerSocket serverSocket = new ServerSocket(4242)) {
+    try (ServerSocket serverSocket = new ServerSocket(4224)) {
       while (true) {
         Socket connSocket = serverSocket.accept();
         new Thread(() -> {
@@ -48,9 +48,7 @@ public class GameServer {
       if (result.getValue1() != null) {
         outToClient.writeBytes(result.getValue1() + "\n");
       } else {
-        // fazer a integração com a lógica de GMSSession, parece mais tranquilo
         GMSReverb reverb = session.handleScream(result.getValue0());
-
         outToClient.writeBytes(reverb.toString() + "\n");
 
         // envia a música
@@ -58,8 +56,9 @@ public class GameServer {
             || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_SUCCESS)) {
           outToClient.writeBytes(session.getNextLine() + "\n");
         }
-        // anuncia game over
-        else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER)) {
+        // anuncia final do jogo
+        else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER) ||
+            Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_WIN)) {
           break;
         }
       }

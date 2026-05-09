@@ -1,4 +1,4 @@
-package br.com.ufrn.Server;
+package br.com.ufrn.GMS.Session;
 
 import java.util.List;
 import java.util.Map;
@@ -84,17 +84,21 @@ public class SongsManager {
           "The deepest incisions, I thought I got better",
           "But maybe I didn't")));
 
-  public static Map<Long, Pair<String, List<String>>> getData() {
-    return data;
-  }
-
   public static Long nextSong(Set<Long> usedSongs) {
-    List<Long> ids = SongsManager.getData()
+    List<Long> ids = SongsManager.data
         .keySet()
         .stream()
         .filter(id -> !usedSongs.contains(id))
         .toList();
 
+    if (ids.isEmpty()) {
+      return -1L;
+    }
+
     return ids.get(random.nextInt(ids.size()));
+  }
+
+  public static Pair<String, List<String>> getSong(Long id) {
+    return SongsManager.data.get(id);
   }
 };

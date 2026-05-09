@@ -1,6 +1,6 @@
 package br.com.ufrn.GMS.Screams;
 
-import br.com.ufrn.GMS.Enums.GMSState;
+import br.com.ufrn.GMS.Enums.ScreamType;
 import br.com.ufrn.Server.Enums.GameDifficulty;
 
 public class IntroScream implements IScream {
@@ -17,8 +17,8 @@ public class IntroScream implements IScream {
   }
 
   @Override
-  public GMSState getType() {
-    return GMSState.INTRO;
+  public ScreamType getType() {
+    return ScreamType.INTRO;
   }
 
   @Override

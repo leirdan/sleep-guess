@@ -2,7 +2,7 @@ package br.com.ufrn.GMS.Enums;
 
 import java.util.Objects;
 
-public enum GMSState {
+public enum SessionState {
   INTRO,
   BREAKDOWN,
   OUTRO;
