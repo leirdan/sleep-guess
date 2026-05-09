@@ -10,9 +10,9 @@ public class IntroScream implements IScream {
   public IntroScream(String username, String difficulty) {
     try {
       this.difficulty = GameDifficulty.valueOf(difficulty.toUpperCase());
-      this.username = username;
+      this.username = username.toLowerCase();
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Invalid difficulty was provided...");
+      throw new IllegalArgumentException("DIFFICULTY values allowed := normal, fan, trve");
     }
   }
 

@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Objects;
 
 import org.javatuples.Pair;
 
 import br.com.ufrn.GMS.GMSParser;
 import br.com.ufrn.GMS.GMSSession;
+import br.com.ufrn.GMS.GMSStatusCode;
+import br.com.ufrn.GMS.Reverbs.GMSReverb;
 import br.com.ufrn.GMS.Screams.IScream;
 
 public class GameServer {
@@ -19,8 +22,6 @@ public class GameServer {
     try (ServerSocket serverSocket = new ServerSocket(4242)) {
       while (true) {
         Socket connSocket = serverSocket.accept();
-        // Criando 1 thread pra cada jogador é possível ter múltiplas partidas
-        // simultaneamente
         new Thread(() -> {
           try {
             handleNewClient(connSocket);
@@ -48,13 +49,20 @@ public class GameServer {
         outToClient.writeBytes(result.getValue1() + "\n");
       } else {
         // fazer a integração com a lógica de GMSSession, parece mais tranquilo
-        outToClient.writeBytes("Comando identificado com sucesso: ");
-        outToClient.writeBytes(result.getValue0().toString() + " \n");
+        GMSReverb reverb = session.handleScream(result.getValue0());
+
+        outToClient.writeBytes(reverb.toString() + "\n");
+
+        // envia a música
+        if (Objects.equals(reverb.statusCode(), GMSStatusCode.INTRO_SUCCESS)
+            || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_SUCCESS)) {
+          outToClient.writeBytes(session.getNextLine() + "\n");
+        }
+        // anuncia game over
+        else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER)) {
+          break;
+        }
       }
-
-      // clientSentence = clientSentence.toUpperCase() + "\n";
-      // outToClient.writeBytes(clientSentence);
     }
-
   }
 }

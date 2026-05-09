@@ -14,15 +14,17 @@ public class GMSParser {
     switch (parts[0]) {
       case "INTRO" -> {
         if (parts.length != 3)
-          // throw new InvalidParameterException("INTRO scream requires only USERNAME and
-          // DIFFICULTY.");
-          return Pair.with(null, "INTRO scream requires only USERNAME and DIFFICULTY.");
+          return Pair.with(null, "INTRO scream requires USERNAME and DIFFICULTY.");
 
-        return Pair.with(new IntroScream(parts[1], parts[2]), null);
+        try {
+          return Pair.with(new IntroScream(parts[1], parts[2]), null);
+        } catch (IllegalArgumentException e) {
+          return Pair.with(null, e.getMessage());
+        }
       }
       case "GUESS" -> {
         if (parts.length != 2)
-          return Pair.with(null, "GUESS scream does require only 1 parameter.");
+          return Pair.with(null, "GUESS scream requires 1 argument.");
 
         return Pair.with(new BreakdownScream(parts[1]), null);
       }
