@@ -8,20 +8,29 @@ import java.net.Socket;
 
 public class GameClient {
   public static void main(String[] args) {
-    String sentence;
+    String input;
 
-    try (var socket = new Socket("lunix", 4242)) {
+    try (var socket = new Socket("lunix", 4224)) {
       var inFromUser = new BufferedReader(new InputStreamReader(System.in));
       var outToServer = new DataOutputStream(socket.getOutputStream());
 
       var inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-      while (true) {
+      new Thread(() -> {
+        try {
+          String reverb;
+          while ((reverb = inFromServer.readLine()) != null) {
+            System.out.println("S> " + reverb);
+          }
+        } catch (Exception e) {
+          System.out.println("Connection closed");
+        }
+      }).start();
 
-        sentence = inFromUser.readLine();
-        outToServer.writeBytes(sentence + "\n");
-        sentence = inFromServer.readLine();
-        System.out.println("S: " + sentence);
+      while ((input = inFromUser.readLine()) != null) {
+        outToServer.writeBytes(input + "\n");
+        // sentence = inFromServer.readLine();
+        // System.out.println("S: " + sentence);
 
       }
     } catch (IOException e) {
