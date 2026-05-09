@@ -1,4 +1,4 @@
-package br.com.ufrn;
+package br.com.ufrn.Client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,12 +15,15 @@ public class GameClient {
       var outToServer = new DataOutputStream(socket.getOutputStream());
 
       var inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      sentence = inFromUser.readLine();
-      outToServer.writeBytes(sentence + "\n");
-      sentence = inFromServer.readLine();
-      System.out.println("FROM SERVER: " + sentence);
 
-      socket.close();
+      while (true) {
+
+        sentence = inFromUser.readLine();
+        outToServer.writeBytes(sentence + "\n");
+        sentence = inFromServer.readLine();
+        System.out.println("S: " + sentence);
+
+      }
     } catch (IOException e) {
       System.out.println("Exception while connecting to server: " + e.getMessage());
     }
