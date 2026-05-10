@@ -5,7 +5,8 @@ import java.util.Objects;
 public enum ScreamType {
   INTRO,
   GUESS,
-  BREAK;
+  BREAK,
+  HELP;
 
   public boolean equals(String other) {
     var lhs = this.toString().toLowerCase();

@@ -40,9 +40,16 @@ public class GameServer {
     GMSSession session = new GMSSession();
     String input;
     var inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    var outToClient = new DataOutputStream(socket.getOutputStream());
+
+    outToClient.writeBytes(
+        """
+            Sleep Token Guess Game!
+            Enter the game with INTRO scream, guess the songs with GUESS screams and, if you are tired, exit with BREAK.
+            In case you need some help, scream HELP.
+            """);
 
     while ((input = inFromClient.readLine()) != null) {
-      var outToClient = new DataOutputStream(socket.getOutputStream());
       Pair<IScream, String> result = parser.parse(input);
 
       if (result.getValue1() != null) {

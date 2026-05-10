@@ -13,6 +13,7 @@ import br.com.ufrn.GMS.Enums.SessionState;
 import br.com.ufrn.GMS.Reverbs.GMSReverb;
 import br.com.ufrn.GMS.Screams.BreakScream;
 import br.com.ufrn.GMS.Screams.GuessScream;
+import br.com.ufrn.GMS.Screams.HelpScream;
 import br.com.ufrn.GMS.Screams.IScream;
 import br.com.ufrn.GMS.Screams.IntroScream;
 import br.com.ufrn.GMS.Utils.GMSStatusCode;
@@ -52,6 +53,9 @@ public class GMSSession {
       case GuessScream guess -> {
         return this.handleGuessScream(guess);
       }
+      case HelpScream _h -> {
+        return this.handleHelpScream();
+      }
       default -> {
         return new GMSReverb(GMSStatusCode.UNKNOWN_SCREAM, "ERROR. Unknown scream.");
       }
@@ -74,9 +78,20 @@ public class GMSSession {
       this.state = SessionState.BREAKDOWN;
       this.currentSong = SongsManager.nextSong(pastSongs);
 
-      return new GMSReverb(GMSStatusCode.INTRO_SUCCESS, "OK. Welcome to our challenge, " + this.username + ".");
+      return new GMSReverb(GMSStatusCode.INTRO_SUCCESS,
+          "OK. Welcome to BREAKDOWN stage, " + this.username + ". Here it comes the first one!");
     });
 
+  }
+
+  private GMSReverb handleHelpScream() {
+    return new GMSReverb(GMSStatusCode.HELP, """
+          Commands:
+            - INTRO: Starts a match by providing username and desired difficulty. Usage: INTRO [username] [difficulty]
+            - GUESS: Guess a song during the match. USAGE: GUESS [song]
+            - BREAK: Ends the match at any time and closes client's connection. USAGE: BREAK
+            - HELP: Displays this section. USAGE: HELP
+        """);
   }
 
   private GMSReverb handleGuessScream(GuessScream scream) {
@@ -97,15 +112,16 @@ public class GMSSession {
         }
 
         return new GMSReverb(GMSStatusCode.BREAKDOWN_GUESS_SUCCESS,
-            "OK. Now you have " + this.score + " points. Get ready for the next one!");
+            "OK. Now you got a total score of " + this.score + ". Here it comes the song "
+                + (this.pastSongs.size() + 1) + "!");
       } else {
         this.chances--;
         if (this.chances != 0) {
           return new GMSReverb(GMSStatusCode.BREAKDOWN_GUESS_ERROR,
-              "ERROR. You have more " + this.chances + " chances.");
+              "ERROR. You have " + this.chances + " more chances.");
         } else {
           return new GMSReverb(GMSStatusCode.BREAKDOWN_GAME_OVER,
-              "ERROR. You lost all chances. You got a score of " + this.score + " points.");
+              "ERROR. You lost all chances. You got a score of " + this.score + ".");
         }
 
       }

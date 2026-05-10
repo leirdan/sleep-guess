@@ -1,6 +1,7 @@
 package br.com.ufrn.GMS.Screams;
 
 import br.com.ufrn.GMS.Enums.ScreamType;
+import br.com.ufrn.GMS.Utils.GMSStatusCode;
 import br.com.ufrn.Server.Enums.GameDifficulty;
 
 public class IntroScream implements IScream {
@@ -12,7 +13,8 @@ public class IntroScream implements IScream {
       this.difficulty = GameDifficulty.valueOf(difficulty.toUpperCase());
       this.username = username.toLowerCase();
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("DIFFICULTY values allowed := normal, fan, trve");
+      throw new IllegalArgumentException(
+          "[" + GMSStatusCode.INVALID_SYNTAX + "] ERROR. DIFFICULTY options := { 'normal', 'fan', 'trve' }");
     }
   }
 

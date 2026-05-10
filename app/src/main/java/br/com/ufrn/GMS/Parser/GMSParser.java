@@ -4,8 +4,10 @@ import org.javatuples.Pair;
 
 import br.com.ufrn.GMS.Screams.BreakScream;
 import br.com.ufrn.GMS.Screams.GuessScream;
+import br.com.ufrn.GMS.Screams.HelpScream;
 import br.com.ufrn.GMS.Screams.IScream;
 import br.com.ufrn.GMS.Screams.IntroScream;
+import br.com.ufrn.GMS.Utils.GMSStatusCode;
 
 public class GMSParser {
   public Pair<IScream, String> parse(String line) {
@@ -14,7 +16,7 @@ public class GMSParser {
     switch (parts[0]) {
       case "INTRO" -> {
         if (parts.length != 3)
-          return Pair.with(null, "INTRO scream requires USERNAME and DIFFICULTY.");
+          return Pair.with(null, "[" + GMSStatusCode.INVALID_SYNTAX + "] ERROR. Usage: INTRO [username] [difficulty]");
 
         try {
           return Pair.with(new IntroScream(parts[1], parts[2]), null);
@@ -24,18 +26,24 @@ public class GMSParser {
       }
       case "GUESS" -> {
         if (parts.length != 2)
-          return Pair.with(null, "GUESS scream requires 1 argument.");
+          return Pair.with(null, "[" + GMSStatusCode.INVALID_SYNTAX + "] ERROR. Usage: GUESS [song]");
 
         return Pair.with(new GuessScream(parts[1]), null);
       }
       case "BREAK" -> {
         if (parts.length != 1)
-          return Pair.with(null, "BREAK scream does not require parameters.");
+          return Pair.with(null, "[" + GMSStatusCode.INVALID_SYNTAX + "] ERROR. Usage: BREAK");
 
         return Pair.with(new BreakScream(), null);
       }
+      case "HELP" -> {
+        if (parts.length != 1)
+          return Pair.with(null, "[" + GMSStatusCode.INVALID_SYNTAX + "] ERROR. Usage: HELP");
+
+        return Pair.with(new HelpScream(), null);
+      }
       default -> {
-        return Pair.with(null, "Unknown scream '" + parts[0] + "'");
+        return Pair.with(null, "[" + GMSStatusCode.UNKNOWN_SCREAM + "] ERROR. Unknown scream '" + parts[0] + "'");
       }
     }
   }
