@@ -9,7 +9,7 @@ public class GMSStatusCode {
   public static Integer BREAKDOWN_GAME_WIN = 24;
 
   // Error codes
-  public static Integer INTRO_ERROR = 40;
+  // public static Integer INTRO_ERROR = 40;
   public static Integer BREAKDOWN_GUESS_ERROR = 41;
   public static Integer BREAKDOWN_GAME_OVER = 42;
 
@@ -17,4 +17,5 @@ public class GMSStatusCode {
   public static Integer INVALID_SYNTAX = 50;
   public static Integer INVALID_STATE_ERROR = 51;
   public static Integer UNKNOWN_SCREAM = 52;
+  public static Integer INTERNAL_PANIC = 53;
 }

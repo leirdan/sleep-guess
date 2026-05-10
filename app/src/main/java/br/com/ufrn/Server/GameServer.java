@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.javatuples.Pair;
 
@@ -14,6 +15,7 @@ import br.com.ufrn.GMS.Parser.GMSParser;
 import br.com.ufrn.GMS.Reverbs.GMSReverb;
 import br.com.ufrn.GMS.Screams.IScream;
 import br.com.ufrn.GMS.Session.GMSSession;
+import br.com.ufrn.GMS.Session.SongsManager;
 import br.com.ufrn.GMS.Utils.GMSStatusCode;
 
 public class GameServer {
@@ -31,7 +33,7 @@ public class GameServer {
         }).start();
       }
     } catch (IOException e) {
-      System.out.println("Exception during game initialization: " + e.getMessage());
+      System.out.println("Error during game initialization: " + e.getMessage());
     }
   }
 
@@ -41,6 +43,13 @@ public class GameServer {
     String input;
     var inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     var outToClient = new DataOutputStream(socket.getOutputStream());
+
+    Optional<GMSReverb> initSongs = SongsManager.init();
+    if (initSongs.isPresent()) {
+      outToClient.writeBytes(initSongs.get().toString() + "\n");
+      socket.close();
+      return;
+    }
 
     outToClient.writeBytes(
         """
