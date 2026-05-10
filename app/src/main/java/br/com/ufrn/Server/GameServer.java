@@ -55,7 +55,7 @@ public class GameServer {
         """
             Sleep Token Guess Game!
             Enter the game with INTRO scream, guess the songs with GUESS screams and, if you are tired, exit with BREAK.
-            In case you need some help, scream HELP.
+            In case you need some help, scream... HELP.
             """);
 
     while ((input = inFromClient.readLine()) != null) {
@@ -75,7 +75,8 @@ public class GameServer {
         }
         // anuncia final do jogo
         else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER) ||
-            Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_WIN)) {
+            Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_WIN) ||
+            Objects.equals(reverb.statusCode(), GMSStatusCode.OUTRO_SUCCESS)) {
           socket.close();
           return;
         }
