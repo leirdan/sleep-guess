@@ -33,6 +33,17 @@ java {
     }
 }
 
+tasks.register('server', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'br.com.ufrn.Server.GameServer'
+}
+
+tasks.register('client', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'br.com.ufrn.Client.GameClient'
+    standardInput = System.in
+}
+
 application {
     // Define the main class for the application.
     mainClass = 'br.com.ufrn.GameServer'
