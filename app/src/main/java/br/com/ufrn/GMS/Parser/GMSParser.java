@@ -1,5 +1,7 @@
 package br.com.ufrn.GMS.Parser;
 
+import java.util.Arrays;
+
 import org.javatuples.Pair;
 
 import br.com.ufrn.GMS.Screams.BreakScream;
@@ -25,10 +27,12 @@ public class GMSParser {
         }
       }
       case "GUESS" -> {
-        if (parts.length != 2)
+        if (parts.length < 2)
           return Pair.with(null, "[" + GMSStatusCode.INVALID_SYNTAX + "] ERROR. Usage: GUESS [song]");
 
-        return Pair.with(new GuessScream(parts[1]), null);
+        String song = String.join(" ", Arrays.copyOfRange(parts, 1, parts.length));
+
+        return Pair.with(new GuessScream(song), null);
       }
       case "BREAK" -> {
         if (parts.length != 1)
