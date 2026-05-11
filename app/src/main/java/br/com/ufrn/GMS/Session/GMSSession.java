@@ -30,8 +30,6 @@ public class GMSSession {
 
   private final LyricFormatter formatter = new LyricFormatter();
   private final Random random = new Random();
-  // This is multiplied with chances,
-  // so a 1st try is 15 points, 2nd is 10 and so it goes ..
   private final Integer pointsPerSuccess = 5;
   private final Set<Long> pastSongs;
 
@@ -101,14 +99,13 @@ public class GMSSession {
 
       if (isGuessRight) {
         this.score += this.chances * this.pointsPerSuccess;
-        this.chances = 3; // Reseta
+        this.chances = 3;
         this.pastSongs.add(this.currentSong);
         this.currentSong = SongsManager.nextSong(this.pastSongs);
         if (this.currentSong == -1) {
-          // Acabou o jogo
           this.state = SessionState.OUTRO;
           return new GMSReverb(GMSStatusCode.BREAKDOWN_GAME_WIN,
-              "OK. You won the game! Congrats, you got " + this.score + " points!");
+              "OK. Congrats, you won the game. " + this.getResults());
         }
 
         return new GMSReverb(GMSStatusCode.BREAKDOWN_GUESS_SUCCESS,
@@ -121,7 +118,7 @@ public class GMSSession {
               "ERROR. You have " + this.chances + " more chances.");
         } else {
           return new GMSReverb(GMSStatusCode.BREAKDOWN_GAME_OVER,
-              "ERROR. You lost all chances. You got a score of " + this.score + ".");
+              "ERROR. You lost all chances. " + this.getResults());
         }
 
       }
@@ -131,7 +128,8 @@ public class GMSSession {
   private GMSReverb handleBreakScream() {
     return this.withState(SessionState.BREAKDOWN, () -> {
       this.state = SessionState.OUTRO;
-      return new GMSReverb(GMSStatusCode.OUTRO_SUCCESS, "OK. You had a score of " + this.score + " points.");
+
+      return new GMSReverb(GMSStatusCode.OUTRO_SUCCESS, "OK. " + this.getResults());
     });
   }
 
@@ -143,6 +141,18 @@ public class GMSSession {
     }
 
     return expectedAction.get();
+  }
+
+  private String getResults() {
+    String temp;
+    StringBuilder sb = new StringBuilder();
+    sb.append("You got a score of ").append(this.score)
+        .append(" points and these are the songs you correctly guessed:\n");
+    for (var pastSong : this.pastSongs) {
+      temp = "- " + SongsManager.getSong(pastSong).getValue0();
+      sb.append(temp).append("\n");
+    }
+    return sb.toString();
   }
 
 }

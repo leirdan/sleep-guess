@@ -30,8 +30,6 @@ public class GameClient {
       String scream;
       while ((scream = inFromUser.readLine()) != null) {
         outToServer.writeBytes(scream + "\n");
-        // sentence = inFromServer.readLine();
-        // System.out.println("S: " + sentence);
 
       }
     } catch (IOException e) {

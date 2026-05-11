@@ -67,14 +67,11 @@ public class GameServer {
         GMSReverb reverb = session.handleScream(result.getValue0());
         outToClient.writeBytes(reverb.toString() + "\n");
 
-        // envia a música
         if (Objects.equals(reverb.statusCode(), GMSStatusCode.INTRO_SUCCESS)
             || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_SUCCESS)
             || Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GUESS_ERROR)) {
           outToClient.writeBytes(session.getNextLine() + "\n");
-        }
-        // anuncia final do jogo
-        else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER) ||
+        } else if (Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_OVER) ||
             Objects.equals(reverb.statusCode(), GMSStatusCode.BREAKDOWN_GAME_WIN) ||
             Objects.equals(reverb.statusCode(), GMSStatusCode.OUTRO_SUCCESS)) {
           socket.close();

@@ -143,6 +143,8 @@ GUESS
 HELP help me please
 ```
 
+É possível notar que os screams são case-sensitive, ou seja, "break" e "BREAK" não são equivalentes e pode gerar reverbs de erro.
+
 === Significado
 \
 
@@ -184,6 +186,8 @@ A aplicação foi desenvolvida inteiramente utilizando Java 17 e a ferramenta de
 ./gradlew server
 ./gradlew client
 ```
+
+Após iniciar o cliente é possível iniciar o jogo a partir das orientações mandadas pelo servidor.
 
 // Proposta: *Aplicação Cliente/Servidor*
 // - O aluno deverá fazer o design de uma aplicação segundo o modelo Cliente/Servidor. A decisão sobre o tipo de aplicação (funcionamento, comunicação, etc) É RESTRITA ao aluno. Criatividade é aspecto que contribui em uma melhor avaliação.
